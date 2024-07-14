@@ -5,7 +5,7 @@ spring:
   main:
     allow-circular-references: true
   server:
-    port: {SERVER_PORT}
+    port: ${SERVER_PORT}
     servlet:
       context-path: /journal
   redis:
