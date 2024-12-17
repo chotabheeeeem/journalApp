@@ -2,6 +2,13 @@ weather:
   api:
     key: ${WEATHER_API_KEY}
 spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
   main:
     allow-circular-references: true
   server:
