@@ -12,9 +12,8 @@ import java.util.Map;
 @Component
 public class JwtUtil {
 
-    private String SECRET_KEY = "TaK+HaV^uvCHEFsEVfypW#7g9^k*Z8$V";
-
     private SecretKey getSigningKey() {
+        String SECRET_KEY = "TaK+HaV^uvCHEFsEVfypW#7g9^k*Z8$V";
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     }
 
@@ -29,10 +28,9 @@ public class JwtUtil {
 
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
-                .verifyWith(getSigningKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
+                .setSigningKey(getSigningKey()) // Use setSigningKey instead of verifyWith
+                .parseClaimsJws(token) // Use parseClaimsJws instead of parseSignedClaims
+                .getBody(); // Use getBody to access claims from the parsed token
     }
 
     private Boolean isTokenExpired(String token) {
@@ -46,12 +44,11 @@ public class JwtUtil {
 
     private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
-                .claims(claims)
-                .subject(subject)
-                .header().empty().add("typ","JWT")
-                .and()
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 50)) // 5 minutes expiration time
+                .setClaims(claims) // Use setClaims() to add claims to the builder
+                .setSubject(subject)
+                .setHeaderParam("typ", "JWT")
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 50))
                 .signWith(getSigningKey())
                 .compact();
     }
@@ -59,6 +56,4 @@ public class JwtUtil {
     public Boolean validateToken(String token) {
         return !isTokenExpired(token);
     }
-
-
 }
