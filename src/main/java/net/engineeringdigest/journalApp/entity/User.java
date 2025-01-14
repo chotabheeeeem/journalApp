@@ -1,6 +1,6 @@
 package net.engineeringdigest.journalApp.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
